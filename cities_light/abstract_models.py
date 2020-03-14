@@ -98,7 +98,7 @@ class AbstractCountry(Base):
                                  choices=CONTINENT_CHOICES)
     tld = models.CharField(max_length=5, blank=True, db_index=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
-    location_map = models.MultiPolygonField(null=True)
+    
 
     class Meta(Base.Meta):
         verbose_name_plural = _('countries')
@@ -117,7 +117,7 @@ class AbstractRegion(Base):
 
     country = models.ForeignKey(CITIES_LIGHT_APP_NAME + '.Country',
                                 on_delete=models.CASCADE)
-    location_map = models.MultiPolygonField(null=True)
+    
 
     class Meta(Base.Meta):
         unique_together = (('country', 'name'), ('country', 'slug'))

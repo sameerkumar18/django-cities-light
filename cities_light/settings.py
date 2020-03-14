@@ -106,22 +106,22 @@ __all__ = [
     'ICountry', 'IRegion', 'ICity', 'IAlternate']
 
 COUNTRY_SOURCES = getattr(settings, 'CITIES_LIGHT_COUNTRY_SOURCES',
-    ['http://download.geonames.org/export/dump/countryInfo.txt'])
+                          ['http://download.geonames.org/export/dump/countryInfo.txt'])
 REGION_SOURCES = getattr(settings, 'CITIES_LIGHT_REGION_SOURCES',
-    ['http://download.geonames.org/export/dump/admin1CodesASCII.txt'])
+                         ['http://download.geonames.org/export/dump/admin1CodesASCII.txt'])
 CITY_SOURCES = getattr(settings, 'CITIES_LIGHT_CITY_SOURCES',
-    ['http://download.geonames.org/export/dump/cities15000.zip'])
+                       ['http://download.geonames.org/export/dump/cities15000.zip'])
 TRANSLATION_SOURCES = getattr(settings, 'CITIES_LIGHT_TRANSLATION_SOURCES',
-    ['http://download.geonames.org/export/dump/alternateNames.zip'])
+                              ['http://download.geonames.org/export/dump/alternateNames.zip'])
 TRANSLATION_LANGUAGES = getattr(settings, 'CITIES_LIGHT_TRANSLATION_LANGUAGES',
-    ['es', 'en', 'pt', 'de', 'pl', 'abbr'])
+                                ['es', 'en', 'pt', 'de', 'pl', 'abbr'])
 
 SOURCES = list(COUNTRY_SOURCES) + list(REGION_SOURCES) + list(CITY_SOURCES)
 SOURCES += TRANSLATION_SOURCES
 
 DATA_DIR = getattr(settings, 'CITIES_LIGHT_DATA_DIR',
-    os.path.normpath(os.path.join(
-        os.path.dirname(os.path.realpath(__file__)), 'data')))
+                   os.path.normpath(os.path.join(
+                       os.path.dirname(os.path.realpath(__file__)), 'data')))
 
 INCLUDE_COUNTRIES = getattr(settings, 'CITIES_LIGHT_INCLUDE_COUNTRIES', None)
 
@@ -144,7 +144,7 @@ if INDEX_SEARCH_NAMES is None:
 
 DEFAULT_APP_NAME = 'cities_light'
 CITIES_LIGHT_APP_NAME = getattr(settings, 'CITIES_LIGHT_APP_NAME',
-    DEFAULT_APP_NAME)
+                                DEFAULT_APP_NAME)
 
 FIXTURES_BASE_URL = getattr(
     settings,

@@ -7,6 +7,7 @@ import datetime
 import logging
 from argparse import RawTextHelpFormatter
 import sys
+
 if sys.platform != 'win32':
     import resource
 
@@ -72,33 +73,33 @@ It is possible to force the import of files which weren't downloaded using the
 
     def add_arguments(self, parser):
         parser.add_argument('--force-import-all', action='store_true',
-            default=False, help='Import even if files are up-to-date.'
-        ),
+                            default=False, help='Import even if files are up-to-date.'
+                            ),
         parser.add_argument('--force-all', action='store_true', default=False,
-            help='Download and import if files are up-to-date.'
-        ),
+                            help='Download and import if files are up-to-date.'
+                            ),
         parser.add_argument('--force-import', action='append', default=[],
-            help='Import even if files matching files are up-to-date'
-        ),
+                            help='Import even if files matching files are up-to-date'
+                            ),
         parser.add_argument('--force', action='append', default=[],
-            help='Download and import even if matching files are up-to-date'
-        ),
+                            help='Download and import even if matching files are up-to-date'
+                            ),
         parser.add_argument('--noinsert', action='store_true',
-            default=False,
-            help='Update existing data only'
-        ),
+                            default=False,
+                            help='Update existing data only'
+                            ),
         parser.add_argument('--hack-translations', action='store_true',
-            default=False,
-            help='Set this if you intend to import translations a lot'
-        ),
+                            default=False,
+                            help='Set this if you intend to import translations a lot'
+                            ),
         parser.add_argument('--keep-slugs', action='store_true',
-            default=False,
-            help='Do not update slugs'
-        ),
+                            default=False,
+                            help='Do not update slugs'
+                            ),
         parser.add_argument('--progress', action='store_true',
-            default=False,
-            help='Show progress bar'
-        ),
+                            default=False,
+                            help='Show progress bar'
+                            ),
 
     def progress_init(self):
         """Initialize progress bar."""
@@ -180,9 +181,9 @@ It is possible to force the import of files which weren't downloaded using the
 
             if not os.path.exists(install_file_path):
                 self.logger.info('Forced import of %s because data do not seem'
-                        ' to have installed successfuly yet, note that this is'
-                        ' equivalent to --force-import-all.' %
-                        destination_file_name)
+                                 ' to have installed successfully yet, note that this is'
+                                 ' equivalent to --force-import-all.' %
+                                 destination_file_name)
                 force_import = True
 
             if downloaded or force_import:
@@ -465,11 +466,11 @@ It is possible to force the import of files which weren't downloaded using the
     def translation_parse(self, items):
         if not hasattr(self, 'translation_data'):
             self.country_ids = set(Country.objects.values_list('geoname_id',
-                flat=True))
+                                                               flat=True))
             self.region_ids = set(Region.objects.values_list('geoname_id',
-                flat=True))
+                                                             flat=True))
             self.city_ids = set(City.objects.values_list('geoname_id',
-                flat=True))
+                                                         flat=True))
 
             self.translation_data = collections.OrderedDict((
                 (Country, {}),

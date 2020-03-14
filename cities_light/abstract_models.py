@@ -7,10 +7,11 @@ import pytz
 
 from django.utils.encoding import python_2_unicode_compatible
 
-from django.db import models
 from django.db.models import lookups
 from django.utils.encoding import force_text
 from django.conf import settings
+from django.contrib.gis.db import models
+from django.contrib.gis import geos
 from django.utils.translation import ugettext_lazy as _
 
 from unidecode import unidecode
@@ -18,10 +19,8 @@ from unidecode import unidecode
 from .validators import timezone_validator
 from .settings import INDEX_SEARCH_NAMES, CITIES_LIGHT_APP_NAME
 
-
 __all__ = ['AbstractCountry', 'AbstractRegion', 'AbstractCity',
            'CONTINENT_CHOICES']
-
 
 CONTINENT_CHOICES = (
     ('OC', _('Oceania')),
@@ -67,6 +66,7 @@ class Base(models.Model):
     slug = autoslug.AutoSlugField(populate_from='name_ascii')
     geoname_id = models.IntegerField(null=True, blank=True, unique=True)
     alternate_names = models.TextField(null=True, blank=True, default='')
+    location_map = models.MultiPolygonField(null=True)
 
     class Meta:
         abstract = True
@@ -77,6 +77,14 @@ class Base(models.Model):
         if display_name:
             return display_name
         return self.name
+
+    def save(self, *args, **kwargs):
+        # https://gis.stackexchange.com/questions/13498/generalizing-polygons-to-multipolygons-in-geodjango
+        # if location_map ends up as a Polygon, make it into a MultiPolygon
+        if self.location_map and isinstance(self.location_map, geos.Polygon):
+            self.location_map = geos.MultiPolygon(self.location_map)
+
+        super().save(*args, **kwargs)
 
 
 class AbstractCountry(Base):
@@ -90,6 +98,7 @@ class AbstractCountry(Base):
                                  choices=CONTINENT_CHOICES)
     tld = models.CharField(max_length=5, blank=True, db_index=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
+    location_map = models.MultiPolygonField(null=True)
 
     class Meta(Base.Meta):
         verbose_name_plural = _('countries')
@@ -104,9 +113,11 @@ class AbstractRegion(Base):
     display_name = models.CharField(max_length=200)
     geoname_code = models.CharField(max_length=50, null=True, blank=True,
                                     db_index=True)
+    code2 = models.CharField(max_length=2, null=True, blank=True)
 
     country = models.ForeignKey(CITIES_LIGHT_APP_NAME + '.Country',
                                 on_delete=models.CASCADE)
+    location_map = models.MultiPolygonField(null=True)
 
     class Meta(Base.Meta):
         unique_together = (('country', 'name'), ('country', 'slug'))
@@ -132,6 +143,8 @@ class ToSearchTextField(models.TextField):
     Trivial TextField subclass that passes values through to_search
     automatically.
     """
+
+
 ToSearchTextField.register_lookup(ToSearchIContainsLookup)
 
 

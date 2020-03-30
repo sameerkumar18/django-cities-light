@@ -113,7 +113,7 @@ class AbstractRegion(Base):
     display_name = models.CharField(max_length=200)
     geoname_code = models.CharField(max_length=50, null=True, blank=True,
                                     db_index=True)
-    code2 = models.CharField(max_length=2, null=True, blank=True)
+    code2 = models.CharField(max_length=5, null=True, blank=True)
 
     country = models.ForeignKey(CITIES_LIGHT_APP_NAME + '.Country',
                                 on_delete=models.CASCADE)
